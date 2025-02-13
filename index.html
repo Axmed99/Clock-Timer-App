@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock & Timer App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="animated-background"></div>
+    <div class="particles-background">
+        <!-- Particles will be added by JavaScript -->
+    </div>
+    <div class="app-container">
+        <!-- Theme Toggle -->
+        <div class="theme-toggle">
+            <button id="themeToggle" class="btn">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <!-- Additional Features -->
+        <div class="additional-features">
+            <!-- Clock Design Selector -->
+            <div class="clock-design-selector">
+                <select id="clockDesign" class="form-control">
+                    <option value="digital">Digital</option>
+                    <option value="analog">Analog</option>
+                    <option value="minimal">Minimal</option>
+                </select>
+            </div>
+
+            <!-- Timezone Selector -->
+            <div class="timezone-selector">
+                <select id="timezone" class="form-control">
+                    <!-- Will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Weather Widget -->
+            <div class="weather-widget">
+                <div class="weather-info">
+                    <i class="weather-icon"></i>
+                    <span class="temperature"></span>
+                    <span class="location"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="app-nav">
+            <button class="nav-btn active" data-mode="clock">
+                <i class="fas fa-clock"></i>
+                <span>Clock</span>
+            </button>
+            <button class="nav-btn" data-mode="timer">
+                <i class="fas fa-hourglass-half"></i>
+                <span>Timer</span>
+            </button>
+            <button class="nav-btn" data-mode="alarm">
+                <i class="fas fa-bell"></i>
+                <span>Alarm</span>
+            </button>
+            <button class="nav-btn" data-mode="stopwatch">
+                <i class="fas fa-stopwatch"></i>
+                <span>Stopwatch</span>
+            </button>
+        </nav>
+
+        <!-- Add inside app-container, before the main content -->
+        <div class="svg-container">
+            <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+                <path fill="rgba(255,255,255,0.1)" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="app-content">
+            <!-- Clock Section -->
+            <section id="clockSection" class="mode-section active">
+                <div class="time-display">
+                    <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+                    <span id="period">AM</span>
+                </div>
+                <div class="date-display">
+                    <span id="date">Monday, January 1, 2024</span>
+                </div>
+                <div class="format-toggle">
+                    <button id="timeFormatToggle" class="btn">12/24 Format</button>
+                </div>
+            </section>
+
+            <!-- Timer Section -->
+            <section id="timerSection" class="mode-section">
+                <div class="timer-display">
+                    <input type="number" id="timerHours" min="0" max="99" value="00">
+                    <span>:</span>
+                    <input type="number" id="timerMinutes" min="0" max="59" value="00">
+                    <span>:</span>
+                    <input type="number" id="timerSeconds" min="0" max="59" value="00">
+                </div>
+                <div class="timer-controls">
+                    <button id="startTimer" class="btn btn-primary">Start</button>
+                    <button id="pauseTimer" class="btn btn-warning">Pause</button>
+                    <button id="resetTimer" class="btn btn-danger">Reset</button>
+                </div>
+            </section>
+
+            <!-- Alarm Section -->
+            <section id="alarmSection" class="mode-section">
+                <div class="alarm-form">
+                    <input type="time" id="alarmTime" class="form-control">
+                    <input type="text" id="alarmLabel" class="form-control" placeholder="Alarm Label">
+                    <div class="alarm-sound-selector">
+                        <select id="alarmSound" class="form-control">
+                            <option value="default">Default Alarm</option>
+                            <option value="gentle">Gentle Wake</option>
+                            <option value="nature">Nature Sounds</option>
+                            <option value="custom">Custom Sound</option>
+                        </select>
+                        <input type="file" id="customAlarmSound" accept="audio/*" style="display: none;">
+                    </div>
+                    <button id="setAlarm" class="btn btn-primary">Set Alarm</button>
+                </div>
+                <div class="alarm-list">
+                    <!-- Alarms will be added here dynamically -->
+                </div>
+            </section>
+
+            <!-- Stopwatch Section -->
+            <section id="stopwatchSection" class="mode-section">
+                <div class="stopwatch-display">
+                    <span id="stopwatchTime">00:00:00</span>
+                </div>
+                <div class="stopwatch-controls">
+                    <button id="startStopwatch" class="btn btn-primary">Start</button>
+                    <button id="lapStopwatch" class="btn btn-secondary">Lap</button>
+                    <button id="resetStopwatch" class="btn btn-danger">Reset</button>
+                </div>
+                <div class="lap-times">
+                    <!-- Lap times will be added here dynamically -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="timerSound" src="assets/timer-sound.mp3"></audio>
+    <audio id="alarmSound" src="assets/alarm-sound.mp3"></audio>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader">
+            <div class="clock-loader">
+                <div class="clock-hand"></div>
+            </div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Add circular timer template -->
+    <template id="circularTimer">
+        <div class="circular-timer">
+            <svg class="timer-svg" viewBox="0 0 100 100">
+                <circle class="timer-path-elapsed" cx="50" cy="50" r="45"/>
+                <circle class="timer-path-remaining" cx="50" cy="50" r="45"/>
+            </svg>
+            <span class="timer-label"></span>
+        </div>
+    </template>
+</body>
+</html> 
